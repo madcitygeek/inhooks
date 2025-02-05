@@ -33,23 +33,28 @@ func (v *messageVerifier) Verify(flow *models.Flow, m *models.Message) error {
 	}
 
 	if verification.VerificationType == models.VerificationTypeHMAC {
+
+		var timestamp, signature, msgContent []byte
+
                 signatureHeader := []byte(m.HttpHeaders.Get(verification.SignatureHeader))
 		// Verkada case - the signature in the header is a compound string.
                 // split signature into two pieces, separated by '|'
                 // first piece is an epoch timestamp, second piece is the HMAC signature
                 if bytes.IndexByte(signatureHeader, '|') != -1 {
 
-	                timestamp := signatureHeader[:bytes.IndexByte(signatureHeader, '|')]
-			signature := signatureHeader[bytes.IndexByte(signatureHeader, '|')+1:]
+	                timestamp = signatureHeader[:bytes.IndexByte(signatureHeader, '|')]
+			signature = signatureHeader[bytes.IndexByte(signatureHeader, '|')+1:]
 
-			msgContent := append(m.Payload, '|')
+			msgContent = append(m.Payload, '|')
 	                msgContent = append(msgContent, timestamp...)
 			fmt.Printf("signatureHeader: %s\n", signatureHeader)
 			fmt.Printf("signedString: %s\n", msgContent)
 		} else {
 			// if we aren't doing this for Verkada, just use the payload as is.
-			msgContent := m.Payload
-			signature := []byte(m.HttpHeaders.Get(verification.SignatureHeader))
+			timestamp = nil
+
+			msgContent = m.Payload
+			signature = []byte(m.HttpHeaders.Get(verification.SignatureHeader))
 		}
 
 		signaturePrefix := verification.SignaturePrefix
