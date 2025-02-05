@@ -34,24 +34,31 @@ func (v *messageVerifier) Verify(flow *models.Flow, m *models.Message) error {
 
 	if verification.VerificationType == models.VerificationTypeHMAC {
                 signatureHeader := []byte(m.HttpHeaders.Get(verification.SignatureHeader))
+		// Verkada case - the signature in the header is a compound string.
                 // split signature into two pieces, separated by '|'
-                // first piece is an epoch timestamp, second piece is the actual signature
-                timestamp := signatureHeader[:bytes.IndexByte(signatureHeader, '|')]
-		signature := signatureHeader[bytes.IndexByte(signatureHeader, '|')+1:]
+                // first piece is an epoch timestamp, second piece is the HMAC signature
+                if bytes.IndexByte(signatureHeader, '|') != -1 {
 
-		signedString := append(m.Payload, '|')
-                signedString = append(signedString, timestamp...)
-		fmt.Printf("signatureHeader: %s\n", signatureHeader)
-		fmt.Printf("signedString: %s\n", signedString)
+	                timestamp := signatureHeader[:bytes.IndexByte(signatureHeader, '|')]
+			signature := signatureHeader[bytes.IndexByte(signatureHeader, '|')+1:]
+
+			msgContent := append(m.Payload, '|')
+	                msgContent = append(msgContent, timestamp...)
+			fmt.Printf("signatureHeader: %s\n", signatureHeader)
+			fmt.Printf("signedString: %s\n", msgContent)
+		}
+		else {
+			// if we aren't doing this for Verkada, just use the payload as is.
+			msgContent := m.Payload
+		}
 
 		signaturePrefix := verification.SignaturePrefix
 		algorithm := verification.HMACAlgorithm
-		//err := v.verifyHMAC(algorithm, signedString, signaturePrefix, os.Getenv(verification.CurrentSecretEnvVar), m.Payload)
-		err := v.verifyHMAC(algorithm, signature, signaturePrefix, os.Getenv(verification.CurrentSecretEnvVar), signedString)
+		err := v.verifyHMAC(algorithm, signature, signaturePrefix, os.Getenv(verification.CurrentSecretEnvVar), msgContent)
 
 		if err != nil && verification.PreviousSecretEnvVar != "" {
 			// try again with previous secret
-			err = v.verifyHMAC(algorithm, signature, signaturePrefix, os.Getenv(verification.PreviousSecretEnvVar), signedString)
+			err = v.verifyHMAC(algorithm, signature, signaturePrefix, os.Getenv(verification.PreviousSecretEnvVar), msgContent)
 		}
 
 		if err != nil {
