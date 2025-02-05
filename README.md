@@ -12,6 +12,8 @@ You can read more about inhooks in the [launch blog post](https://didil.medium.c
 
 *Note: This software is still early in its development cycle / not battle-tested. Test thoroughly before using in production systems.*
 
+*Note: This is being experimented with to handle Verkada webhooks. Do not use in production without even more testing than mentioned above.*
+
 ## Architecture
 
 ![Inhooks Architecture](inhooks-architecture.png?raw=true "Inhooks Architecture")
