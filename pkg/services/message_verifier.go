@@ -51,8 +51,6 @@ func (v *messageVerifier) Verify(flow *models.Flow, m *models.Message) error {
 			fmt.Printf("signedString: %s\n", msgContent)
 		} else {
 			// if we aren't doing this for Verkada, just use the payload as is.
-			timestamp = nil
-
 			msgContent = m.Payload
 			signature = []byte(m.HttpHeaders.Get(verification.SignatureHeader))
 		}
