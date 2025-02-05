@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"hash"
 	"os"
+	"bytes"
 
 	"github.com/didil/inhooks/pkg/models"
 	"github.com/pkg/errors"
@@ -32,14 +33,25 @@ func (v *messageVerifier) Verify(flow *models.Flow, m *models.Message) error {
 	}
 
 	if verification.VerificationType == models.VerificationTypeHMAC {
-		signature := []byte(m.HttpHeaders.Get(verification.SignatureHeader))
+                signatureHeader := []byte(m.HttpHeaders.Get(verification.SignatureHeader))
+                // split signature into two pieces, separated by '|'
+                // first piece is an epoch timestamp, second piece is the actual signature
+                timestamp := signatureHeader[:bytes.IndexByte(signatureHeader, '|')]
+		signature := signatureHeader[bytes.IndexByte(signatureHeader, '|')+1:]
+
+		signedString := append(m.Payload, '|')
+                signedString = append(signedString, timestamp...)
+		fmt.Printf("signatureHeader: %s\n", signatureHeader)
+		fmt.Printf("signedString: %s\n", signedString)
+
 		signaturePrefix := verification.SignaturePrefix
 		algorithm := verification.HMACAlgorithm
-		err := v.verifyHMAC(algorithm, signature, signaturePrefix, os.Getenv(verification.CurrentSecretEnvVar), m.Payload)
+		//err := v.verifyHMAC(algorithm, signedString, signaturePrefix, os.Getenv(verification.CurrentSecretEnvVar), m.Payload)
+		err := v.verifyHMAC(algorithm, signature, signaturePrefix, os.Getenv(verification.CurrentSecretEnvVar), signedString)
 
 		if err != nil && verification.PreviousSecretEnvVar != "" {
 			// try again with previous secret
-			err = v.verifyHMAC(algorithm, signature, signaturePrefix, os.Getenv(verification.PreviousSecretEnvVar), m.Payload)
+			err = v.verifyHMAC(algorithm, signature, signaturePrefix, os.Getenv(verification.PreviousSecretEnvVar), signedString)
 		}
 
 		if err != nil {
