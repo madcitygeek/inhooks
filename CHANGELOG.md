@@ -1,5 +1,32 @@
 # Changelog
 
+## [0.1.0](https://github.com/madcitygeek/inhooks/compare/v0.1.11...v0.1.0) (2025-02-05)
+
+
+### Features
+
+* add docker images ([#63](https://github.com/madcitygeek/inhooks/issues/63)) ([a2c66ad](https://github.com/madcitygeek/inhooks/commit/a2c66ad24943114a4fc808906ea20ada9fff19c5))
+* Add Prometheus exporter and metrics ([#48](https://github.com/madcitygeek/inhooks/issues/48)) ([c1fc6eb](https://github.com/madcitygeek/inhooks/commit/c1fc6eb0218da0b9c5790596df04788ec29124c9))
+* add ready queue concurrent processing ([#39](https://github.com/madcitygeek/inhooks/issues/39)) ([52d362d](https://github.com/madcitygeek/inhooks/commit/52d362dbf3c29b99a4b8daaf80c3d77989d9d786))
+* cleanup done queue ([#37](https://github.com/madcitygeek/inhooks/issues/37)) ([e5e62c1](https://github.com/madcitygeek/inhooks/commit/e5e62c129e6bb63960f5593126b5b754b37e0379))
+* exponential retries ([#31](https://github.com/madcitygeek/inhooks/issues/31)) ([2f8ff7f](https://github.com/madcitygeek/inhooks/commit/2f8ff7fd04cc7d9096145a15f6969257c2cc5ae4))
+* extra logging info for queued messages ([bd7bb17](https://github.com/madcitygeek/inhooks/commit/bd7bb175500bf3a3253bd1d2a07ab9a9e1067a89))
+* handle scheduled queue ([279980d](https://github.com/madcitygeek/inhooks/commit/279980dc657a1c285a62aad9cdfad577f7f07449))
+* hmac 256 verification ([#43](https://github.com/madcitygeek/inhooks/issues/43)) ([ed1906c](https://github.com/madcitygeek/inhooks/commit/ed1906ce5fa91d8d23e2c8a4e96e4fe949526eee))
+* log next retry time when requeuing failed message ([aae9ea3](https://github.com/madcitygeek/inhooks/commit/aae9ea3641c249bf27d571d2c28b96506f00914c))
+* Message transform with javascript ([#55](https://github.com/madcitygeek/inhooks/issues/55)) ([75a0092](https://github.com/madcitygeek/inhooks/commit/75a009204107abcd320a289b3d5da8b5123d8b81))
+
+
+### Bug Fixes
+
+* fix goreleaser docker ([#65](https://github.com/madcitygeek/inhooks/issues/65)) ([ffce72c](https://github.com/madcitygeek/inhooks/commit/ffce72c362881dd9e1f695e5219cb8a7e2f2577f))
+* log processing error ([#46](https://github.com/madcitygeek/inhooks/issues/46)) ([971fcfe](https://github.com/madcitygeek/inhooks/commit/971fcfe1b231918ca7e561a46f93bf0b68686cef))
+
+
+### Miscellaneous Chores
+
+* release 0.1.0 ([295cf5a](https://github.com/madcitygeek/inhooks/commit/295cf5af243ee5aa848481335c14206d389a2f24))
+
 ## [0.1.11](https://github.com/didil/inhooks/compare/v0.1.10...v0.1.11) (2025-02-01)
 
 
