@@ -49,6 +49,7 @@ func (v *messageVerifier) Verify(flow *models.Flow, m *models.Message) error {
 		} else {
 			// if we aren't doing this for Verkada, just use the payload as is.
 			msgContent := m.Payload
+			signature := []byte(m.HttpHeaders.Get(verification.SignatureHeader))
 		}
 
 		signaturePrefix := verification.SignaturePrefix
