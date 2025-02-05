@@ -46,8 +46,7 @@ func (v *messageVerifier) Verify(flow *models.Flow, m *models.Message) error {
 	                msgContent = append(msgContent, timestamp...)
 			fmt.Printf("signatureHeader: %s\n", signatureHeader)
 			fmt.Printf("signedString: %s\n", msgContent)
-		}
-		else {
+		} else {
 			// if we aren't doing this for Verkada, just use the payload as is.
 			msgContent := m.Payload
 		}
